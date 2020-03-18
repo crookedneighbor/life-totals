@@ -41,6 +41,7 @@
           <div id="join-game-container" class="field has-addons">
             <div class="control">
               <input
+                id="join-id"
                 class="input"
                 type="text"
                 placeholder="Enter Game Code Here"
@@ -55,26 +56,31 @@
         </div>
 
         <div id="game-container" class="is-hidden column has-text-centered">
-          <div id="your-name" class="field has-addons">
-            <div class="control">
-              <input
-                class="input"
-                type="text"
-                placeholder="Your Name"
-              />
-            </div>
-            <div class="control">
-              <a id="enter-name" class="button is-info">
-                Save Name
-              </a>
+          <div id="your-name">
+            <p>
+              What should we call you?
+            </p>
+            <div class="field has-addons">
+              <div class="control">
+                <input class="input" type="text" placeholder="Nickname" />
+              </div>
+              <div class="control">
+                <a id="enter-name" class="button is-info">
+                  Create Your Player
+                </a>
+              </div>
             </div>
           </div>
 
-          <p>
-            Share this code with your other players!
-          </p>
           <hr />
-          <pre id="public-id"></pre>
+
+          <div id="game-code">
+            <p>
+              Share this code with your other players!
+            </p>
+            <br />
+            <pre id="public-id"></pre>
+          </div>
         </div>
       </div>
     </main>

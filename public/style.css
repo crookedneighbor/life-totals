@@ -10,7 +10,7 @@ main.container {
     justify-content: center;
 }
 
-#join-game-container {
+#join-game-container, #your-name .field {
   justify-content: center;
 }
 

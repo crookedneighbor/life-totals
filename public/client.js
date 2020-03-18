@@ -6,6 +6,7 @@ const startJoinContainer = document.getElementById('start-or-join-container');
 const gameContainer = document.getElementById('game-container');
 const startButton = document.getElementById('start-game');
 const joinButton = document.getElementById('join-game');
+const joinInput = document.getElementById('join-id');
 
 fetch('/get-games')
 
@@ -23,3 +24,20 @@ startButton.addEventListener('click', (e) => {
       }
     });
 });
+
+joinButton.addEventListener('click', (e) => {
+  fetch("/join-game", {
+    method: "POST",
+    body: JSON.stringify({
+      publicId: joinInput.value
+    }),
+    headers: { "Content-Type": "application/json" }
+  })
+    .then(res => res.json())
+    .then(response => {
+      if (response.success) {
+        startJoinContainer.classList.add('is-hidden');
+        gameContainer.classList.remove('is-hidden');
+      }
+    });
+})
