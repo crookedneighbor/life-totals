@@ -25,21 +25,37 @@ const db = new sqlite3.Database(dbFile);
 db.serialize(() => {
   if (!exists) {
     db.run(
-      "CREATE TABLE Dreams (id INTEGER PRIMARY KEY AUTOINCREMENT, dream TEXT)"
+      "CREATE TABLE Games (id INTEGER PRIMARY KEY AUTOINCREMENT, public_id TEXT)"
     );
-    console.log("New table Dreams created!");
+    db.run(
+      "CREATE TABLE Players (id INTEGER PRIMARY KEY AUTOINCREMENT, game_id TEXT, name TEXT)"
+    );
+    db.run(
+      "CREATE TABLE Cards (id INTEGER PRIMARY KEY AUTOINCREMENT, game_id TEXT, img TEXT)"
+    );
+    console.log("New tables, Games, Player, Card created!");
 
     // insert default dreams
     db.serialize(() => {
       db.run(
-        'INSERT INTO Dreams (dream) VALUES ("Find and count some sheep"), ("Climb a really tall mountain"), ("Wash the dishes")'
+        'INSERT INTO Games (public_id) VALUES ("id_1"), ("id_2"), ("id_3")'
       );
     });
   } else {
-    console.log('Database "Dreams" ready to go!');
-    db.each("SELECT * from Dreams", (err, row) => {
+    console.log('Database "Games" ready to go!');
+    db.each("SELECT * from Games", (err, row) => {
       if (row) {
-        console.log(`record: ${row.dream}`);
+        console.log(`record: ${row.public_id}`);
+      }
+    });
+    db.each("SELECT * from Players", (err, row) => {
+      if (row) {
+        console.log(`record: ${row.name}`);
+      }
+    });
+    db.each("SELECT * from Cards", (err, row) => {
+      if (row) {
+        console.log(`record: ${row.img}`);
       }
     });
   }
@@ -52,7 +68,7 @@ app.get("/", (request, response) => {
 
 // endpoint to get all the dreams in the database
 app.get("/getDreams", (request, response) => {
-  db.all("SELECT * from Dreams", (err, rows) => {
+  db.all("SELECT * from Games", (err, rows) => {
     response.send(JSON.stringify(rows));
   });
 });
@@ -65,7 +81,7 @@ app.post("/addDream", (request, response) => {
   // so they can write to the database
   if (!process.env.DISALLOW_WRITE) {
     const cleansedDream = cleanseString(request.body.dream);
-    db.run(`INSERT INTO Dreams (dream) VALUES (?)`, cleansedDream, error => {
+    db.run(`INSERT INTO Games (public_id) VALUES (?)`, cleansedDream, error => {
       if (error) {
         response.send({ message: "error!" });
       } else {
@@ -80,7 +96,7 @@ app.get("/clearDreams", (request, response) => {
   // DISALLOW_WRITE is an ENV variable that gets reset for new projects so you can write to the database
   if (!process.env.DISALLOW_WRITE) {
     db.each(
-      "SELECT * from Dreams",
+      "SELECT * from Games",
       (err, row) => {
         console.log("row", row);
         db.run(`DELETE FROM Dreams WHERE ID=?`, row.id, error => {

@@ -16,7 +16,7 @@ fetch("/getDreams", {})
   .then(res => res.json())
   .then(response => {
     response.forEach(row => {
-      appendNewDream(row.dream);
+      appendNewDream(row.public_id);
     });
   });
 
