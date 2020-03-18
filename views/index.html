@@ -56,30 +56,49 @@
         </div>
 
         <div id="game-container" class="is-hidden column has-text-centered">
+          <div id="your-life-total" class="is-hidden life-total">
+            10
+          </div>
+          <div id="other-life-totals">
+            <div class="life-total">
+              15
+            </div>
+            <div class="life-total">
+              15
+            </div>
+          </div>
+          
           <div id="your-name">
             <p>
               What should we call you?
             </p>
             <div class="field has-addons">
               <div class="control">
-                <input class="input" type="text" placeholder="Nickname" />
+                <input
+                  id="name-input"
+                  class="input"
+                  type="text"
+                  placeholder="Nickname"
+                />
               </div>
               <div class="control">
-                <a id="enter-name" class="button is-info">
+                <button id="add-player" class="button is-info">
                   Create Your Player
-                </a>
+                </button>
               </div>
             </div>
           </div>
 
-          <hr />
+          <div id="game-code-container" class="is-hidden">
+            <hr />
 
-          <div id="game-code">
-            <p>
-              Share this code with your other players!
-            </p>
-            <br />
-            <pre id="public-id"></pre>
+            <div id="game-code">
+              <p>
+                Share this code with your other players!
+              </p>
+              <br />
+              <pre id="public-id"></pre>
+            </div>
           </div>
         </div>
       </div>
