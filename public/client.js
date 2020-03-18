@@ -34,7 +34,7 @@ dreamsForm.onsubmit = event => {
 
   const data = { dream: dreamInput.value };
 
-  fetch("/addDream", {
+  fetch("/add-game", {
     method: "POST",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json" }
@@ -53,7 +53,7 @@ dreamsForm.onsubmit = event => {
 };
 
 clearButton.addEventListener('click', event => {
-  fetch("/clearDreams", {})
+  fetch("/clear-games", {})
     .then(res => res.json())
     .then(response => {
       console.log("cleared dreams");

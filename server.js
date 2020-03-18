@@ -21,6 +21,7 @@ const exists = fs.existsSync(dbFile);
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(dbFile);
 
+
 // if ./.data/sqlite.db does not exist, create it, otherwise print records to console
 db.serialize(() => {
   if (!exists) {
@@ -68,15 +69,18 @@ app.get("/", (request, response) => {
 
 // endpoint to get all the dreams in the database
 app.get("/getDreams", (request, response) => {
+  console.log('called get dreams');
   db.all("SELECT * from Games", (err, rows) => {
+    console.log(err);
+    console.log(rows);
     response.send(JSON.stringify(rows));
   });
 });
 
 // endpoint to add a dream to the database
-app.post("/addDream", (request, response) => {
+app.post("/add-game", (request, response) => {
   console.log(`add to dreams ${request.body.dream}`);
-
+  
   // DISALLOW_WRITE is an ENV variable that gets reset for new projects
   // so they can write to the database
   if (!process.env.DISALLOW_WRITE) {
@@ -92,14 +96,16 @@ app.post("/addDream", (request, response) => {
 });
 
 // endpoint to clear dreams from the database
-app.get("/clearDreams", (request, response) => {
+app.get("/clear-games", (request, response) => {
+  console.log('called clear games')
   // DISALLOW_WRITE is an ENV variable that gets reset for new projects so you can write to the database
   if (!process.env.DISALLOW_WRITE) {
+    console.log('writing');
     db.each(
       "SELECT * from Games",
       (err, row) => {
         console.log("row", row);
-        db.run(`DELETE FROM Dreams WHERE ID=?`, row.id, error => {
+        db.run(`DELETE FROM Games WHERE ID=?`, row.id, error => {
           if (row) {
             console.log(`deleted row ${row.id}`);
           }
