@@ -6,6 +6,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const fs = require("fs");
+const uid = new (require("short-unique-id")).default();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -20,7 +21,6 @@ const dbFile = "./.data/sqlite.db";
 const exists = fs.existsSync(dbFile);
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(dbFile);
-
 
 // if ./.data/sqlite.db does not exist, create it, otherwise print records to console
 db.serialize(() => {
@@ -68,8 +68,8 @@ app.get("/", (request, response) => {
 });
 
 // endpoint to get all the dreams in the database
-app.get("/getDreams", (request, response) => {
-  console.log('called get dreams');
+app.get("/get-games", (request, response) => {
+  console.log("called get dreams");
   db.all("SELECT * from Games", (err, rows) => {
     console.log(err);
     console.log(rows);
@@ -78,18 +78,24 @@ app.get("/getDreams", (request, response) => {
 });
 
 // endpoint to add a dream to the database
-app.post("/add-game", (request, response) => {
-  console.log(`add to dreams ${request.body.dream}`);
-  
+app.post("/start-game", (request, response) => {
+  console.log("called start game");
   // DISALLOW_WRITE is an ENV variable that gets reset for new projects
   // so they can write to the database
   if (!process.env.DISALLOW_WRITE) {
-    const cleansedDream = cleanseString(request.body.dream);
-    db.run(`INSERT INTO Games (public_id) VALUES (?)`, cleansedDream, error => {
+    const publicId = uid.randomUUID(6);
+    console.log("id", publicId);
+    db.run(`INSERT INTO Games (public_id) VALUES (?)`, publicId, error => {
       if (error) {
-        response.send({ message: "error!" });
+        response.send({
+          success: false,
+          message: "Something went wrong :( :( :("
+        });
       } else {
-        response.send({ message: "success" });
+        response.send({
+          success: true,
+          publicId
+        });
       }
     });
   }
@@ -97,10 +103,10 @@ app.post("/add-game", (request, response) => {
 
 // endpoint to clear dreams from the database
 app.get("/clear-games", (request, response) => {
-  console.log('called clear games')
+  console.log("called clear games");
   // DISALLOW_WRITE is an ENV variable that gets reset for new projects so you can write to the database
   if (!process.env.DISALLOW_WRITE) {
-    console.log('writing');
+    console.log("writing");
     db.each(
       "SELECT * from Games",
       (err, row) => {
@@ -113,9 +119,14 @@ app.get("/clear-games", (request, response) => {
       },
       err => {
         if (err) {
-          response.send({ message: "error!" });
+          response.send({
+            success: false,
+            message: "Something went wrong :( :( :("
+          });
         } else {
-          response.send({ message: "success" });
+          response.send({
+            success: true
+          });
         }
       }
     );

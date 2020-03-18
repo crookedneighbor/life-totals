@@ -6,6 +6,7 @@ const startJoinContainer = document.getElementById('start-or-join-container');
 const startButton = document.getElementById('start-game');
 const joinButton = document.getElementById('join-game');
 
+fetch('/get-games')
 
 startButton.addEventListener('click', (e) => {
   fetch("/start-game", {
@@ -14,6 +15,6 @@ startButton.addEventListener('click', (e) => {
   })
     .then(res => res.json())
     .then(response => {
-      console.log(JSON.stringify(response));
+      console.log(response)
     });
 });
