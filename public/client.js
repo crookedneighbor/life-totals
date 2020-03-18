@@ -3,6 +3,7 @@
 
 console.log("hello world :o");
 const startJoinContainer = document.getElementById('start-or-join-container');
+const gameContainer = document.getElementById('game-container');
 const startButton = document.getElementById('start-game');
 const joinButton = document.getElementById('join-game');
 
@@ -15,6 +16,10 @@ startButton.addEventListener('click', (e) => {
   })
     .then(res => res.json())
     .then(response => {
-      console.log(response)
+      if (response.success) {
+        startJoinContainer.classList.add('is-hidden');
+        document.getElementById('public-id').innerText = response.publicId;
+        gameContainer.classList.remove('is-hidden');
+      }
     });
 });

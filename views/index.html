@@ -30,12 +30,14 @@
     <main class="container">
       <div id="main" class="columns is-vcentered is-desktop">
         <div id="start-or-join-container" class="column has-text-centered">
-          <button id="start-game" class="button is-large is-primary">Start Game</button>
-        
+          <button id="start-game" class="button is-large is-primary">
+            Start Game
+          </button>
+
           <p>
             or
           </p>
-        
+
           <div id="join-game-container" class="field has-addons">
             <div class="control">
               <input
@@ -50,6 +52,29 @@
               </a>
             </div>
           </div>
+        </div>
+
+        <div id="game-container" class="is-hidden column has-text-centered">
+          <div id="your-name" class="field has-addons">
+            <div class="control">
+              <input
+                class="input"
+                type="text"
+                placeholder="Your Name"
+              />
+            </div>
+            <div class="control">
+              <a id="enter-name" class="button is-info">
+                Save Name
+              </a>
+            </div>
+          </div>
+
+          <p>
+            Share this code with your other players!
+          </p>
+          <hr />
+          <pre id="public-id"></pre>
         </div>
       </div>
     </main>

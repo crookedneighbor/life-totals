@@ -13,3 +13,7 @@ main.container {
 #join-game-container {
   justify-content: center;
 }
+
+#public-id {
+  font-size: 6rem;
+}
