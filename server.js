@@ -103,26 +103,29 @@ app.post("/start-game", (request, response) => {
 
 app.post("/join-game", (request, response) => {
   const publicId = request.body.publicId;
-  const name = request.body.name;
-  
-  console.log("called start game");
+  const playerName = request.body.name;
+
   // DISALLOW_WRITE is an ENV variable that gets reset for new projects
   // so they can write to the database
   if (!process.env.DISALLOW_WRITE) {
     console.log("id", publicId);
-    db.run(`INSERT INTO Players (game_id, name) VALUES (?)`, publicId, name, error => {
-      if (error) {
-        response.send({
-          success: false,
-          message: "Something went wrong :( :( :("
-        });
-      } else {
-        response.send({
-          success: true,
-          publicId
-        });
+    db.run(
+      `INSERT INTO Players (game_id, name) VALUES (${publicId}, ${playerName})`,
+      error => {
+        console.log(error);
+        if (error) {
+          response.send({
+            success: false,
+            message: "Something went wrong :( :( :("
+          });
+        } else {
+          response.send({
+            success: true,
+            lifeTotal: 40
+          });
+        }
       }
-    });
+    );
   }
 });
 
