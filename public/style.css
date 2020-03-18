@@ -5,10 +5,9 @@ main.container {
   left: 0;
   right: 0;
   width: 100%;
-}
-
-main.container .columns {
   align-items: center;
+    display: flex;
+    justify-content: center;
 }
 
 #join-game-container {
