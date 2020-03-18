@@ -9,7 +9,9 @@ const joinButton = document.getElementById('join-game');
 const joinInput = document.getElementById('join-id');
 const addPlayerButton = document.getElementById('add-player');
 
-fetch('/get-games')
+const yourLife = document.getElementById('your-life-total');
+
+//fetch('/get-games')
 
 startButton.addEventListener('click', (e) => {
   fetch("/start-game", {
@@ -47,7 +49,8 @@ addPlayerButton.addEventListener('click', () => {
     console.log(response)
       if (response.success) {
         document.getElementById('your-name').classList.add('is-hidden');
-        document.getElementById('your-life-total').classList.remove('is-hidden');
+        yourLife.querySelector('.points').innerText = response.lifeTotal;
+        yourLife.classList.remove('is-hidden');
         startJoinContainer.classList.add('is-hidden');
         gameContainer.classList.remove('is-hidden');
       }

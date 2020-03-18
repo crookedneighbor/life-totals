@@ -17,3 +17,14 @@ main.container {
 #public-id {
   font-size: 6rem;
 }
+
+.life-total {
+  font-size: 4rem;
+    background: indianred;
+    color: white;
+    height: 200px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

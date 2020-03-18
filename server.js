@@ -44,14 +44,15 @@ db.serialize(() => {
     });
   } else {
     console.log('Database "Games" ready to go!');
-    db.each("SELECT * from Games", (err, row) => {
+    /*db.each("SELECT * from Games", (err, row) => {
       if (row) {
-        console.log(`record: ${row.public_id}`);
+        console.log(`game: ${row.public_id}`);
       }
-    });
+    });*/
     db.each("SELECT * from Players", (err, row) => {
       if (row) {
-        console.log(`record: ${row.name}`);
+        console.log(row);
+        console.log(`player: ${row.name}`);
       }
     });
     db.each("SELECT * from Cards", (err, row) => {
@@ -110,7 +111,7 @@ app.post("/join-game", (request, response) => {
   if (!process.env.DISALLOW_WRITE) {
     console.log("id", publicId);
     db.run(
-      `INSERT INTO Players (game_id, name) VALUES (${publicId}, ${playerName})`,
+      `INSERT INTO Players (game_id, name) VALUES (?, ?)`, publicId, playerName,
       error => {
         console.log(error);
         if (error) {
