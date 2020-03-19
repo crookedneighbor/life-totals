@@ -29,3 +29,8 @@ main.container {
   align-items: center;
   justify-content: center;
 }
+
+.life-total .name {
+  position: absolute;
+  
+}

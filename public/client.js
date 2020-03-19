@@ -22,7 +22,7 @@ function displayGame () {
 function start () {
   document.getElementById('your-name').classList.add('is-hidden');
   
-  /*const ref = setInterval(() => {
+  const ref = setInterval(() => {
     fetch('/game-state/' + joinInput.value).then(res => res.json()).then(response => {
       console.log(response)
       if (!response.success) {
@@ -36,15 +36,21 @@ function start () {
         
         if (!el) {
           el = document.createElement('div')
+          el.innerHTML = `
+<div class="name"></div>
+<div class="points"></div>
+`
           el.classList.add('life-total')
+          el.querySelector('.name').innerText = name
+          
           el.setAttribute('data-player-name', name)
           lifeTotals.appendChild(el)
         }
-        el.innerText = life || 0;
+        el.querySelector('.points').innerText = life || 0;
         console.log('player:', name, life)
       });
     })
-  }, 5000)*/
+  }, 5000)
 }
 
 if (gameId) {
