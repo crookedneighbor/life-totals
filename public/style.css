@@ -6,11 +6,12 @@ main.container {
   right: 0;
   width: 100%;
   align-items: center;
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
-#join-game-container, #your-name .field {
+#join-game-container,
+#your-name .field {
   justify-content: center;
 }
 
@@ -20,11 +21,11 @@ main.container {
 
 .life-total {
   font-size: 4rem;
-    background: indianred;
-    color: white;
-    height: 200px;
-    width: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  background: indianred;
+  color: white;
+  height: 200px;
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

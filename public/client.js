@@ -1,6 +1,7 @@
 // client-side js
 // run by the browser each time your view template referencing it is loaded
 
+console.log(new URLSearchParams(window.location.search));
 console.log("hello world :o");
 const startJoinContainer = document.getElementById('start-or-join-container');
 const gameContainer = document.getElementById('game-container');

@@ -103,8 +103,8 @@ app.post("/start-game", (request, response) => {
 });
 
 app.post("/join-game", (request, response) => {
-  const publicId = request.body.publicId;
-  const playerName = request.body.name;
+  const publicId = cleanseString(request.body.publicId);
+  const playerName = cleanseString(request.body.name);
 
   // DISALLOW_WRITE is an ENV variable that gets reset for new projects
   // so they can write to the database
@@ -123,38 +123,6 @@ app.post("/join-game", (request, response) => {
           response.send({
             success: true,
             lifeTotal: 40
-          });
-        }
-      }
-    );
-  }
-});
-
-// endpoint to clear dreams from the database
-app.get("/clear-games", (request, response) => {
-  console.log("called clear games");
-  // DISALLOW_WRITE is an ENV variable that gets reset for new projects so you can write to the database
-  if (!process.env.DISALLOW_WRITE) {
-    console.log("writing");
-    db.each(
-      "SELECT * from Games",
-      (err, row) => {
-        console.log("row", row);
-        db.run(`DELETE FROM Games WHERE ID=?`, row.id, error => {
-          if (row) {
-            console.log(`deleted row ${row.id}`);
-          }
-        });
-      },
-      err => {
-        if (err) {
-          response.send({
-            success: false,
-            message: "Something went wrong :( :( :("
-          });
-        } else {
-          response.send({
-            success: true
           });
         }
       }
