@@ -1,7 +1,7 @@
 // server.js
 // where your node app starts
 
-const del = require('del')
+const del = require("del");
 // init project
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -112,9 +112,10 @@ app.post("/join-game", (request, response) => {
   if (!process.env.DISALLOW_WRITE) {
     console.log("id", publicId);
     db.run(
-      `INSERT INTO Players (game_id, name) VALUES (?, ?)`,
+      `INSERT INTO Players (game_id, name, life) VALUES (?, ?, ?)`,
       publicId,
       playerName,
+      40,
       error => {
         console.log(error);
         if (error) {
@@ -136,12 +137,12 @@ app.post("/join-game", (request, response) => {
 app.post("/verify-player", (request, response) => {
   const gameId = cleanseString(request.body.gameId);
   const playerName = cleanseString(request.body.playerName);
-  console.log(gameId)
-  console.log(playerName)
-  db.run(
+  console.log(gameId);
+  console.log(playerName);
+  db.get(
     `SELECT * FROM Players WHERE game_id='${gameId}' and name='${playerName}'`,
-    error => {
-      if (error) {
+    (error, row) => {
+      if (error || !row) {
         response.send({
           success: false,
           message: "Something went wrong :( :( :("
@@ -155,9 +156,26 @@ app.post("/verify-player", (request, response) => {
   );
 });
 
-app.get('/game-state/', (request, response) => {
-  
-})
+app.get("/game-state/:gameId", (request, response) => {
+  const gameId = request.params.gameId;
+  db.all(
+    `SELECT name,life FROM Players WHERE game_id='${gameId}'`,
+    (err, rows) => {
+      if (err) {
+        console.log(err);
+        response.send({
+          success: false
+        });
+        return;
+      }
+
+      response.send({
+        success: true,
+        players: rows
+      });
+    }
+  );
+});
 
 // helper function that prevents html/css/script malice
 const cleanseString = function(string) {

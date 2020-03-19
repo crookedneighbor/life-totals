@@ -21,8 +21,19 @@ function displayGame () {
 function start () {
   document.getElementById('your-name').classList.add('is-hidden');
   
-  setInterval(() => {
-    
+  const ref = setInterval(() => {
+    fetch('/game-state/' + joinInput.value).then(res => res.json()).then(response => {
+      console.log(response)
+      if (!response.success) {
+        console.error('something went really wrong');
+        clearInterval(ref);
+        return
+      }
+      
+      response.players.forEach(player => {
+        console.log('player:', player)
+      });
+    })
   }, 5000)
 }
 
