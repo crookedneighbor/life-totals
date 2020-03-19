@@ -111,7 +111,9 @@ app.post("/join-game", (request, response) => {
   if (!process.env.DISALLOW_WRITE) {
     console.log("id", publicId);
     db.run(
-      `INSERT INTO Players (game_id, name) VALUES (?, ?)`, publicId, playerName,
+      `INSERT INTO Players (game_id, name) VALUES (?, ?)`,
+      publicId,
+      playerName,
       error => {
         console.log(error);
         if (error) {
@@ -132,27 +134,25 @@ app.post("/join-game", (request, response) => {
 
 app.post("/verify-player", (request, response) => {
   const gameId = cleanseString(request.body.gameId);
-  const playerName = cleanseString(request.body.name);
-
-  
-    db.run(
-      `SELECT * FROM Players where game_id=${gameId} and name=${playerName}`,
-      error => {
-        console.log(error);
-        if (error) {
-          response.send({
-            success: false,
-            message: "Something went wrong :( :( :("
-          });
-        } else {
-          response.send({
-            success: true,
-            lifeTotal: 40
-          });
-        }
+  const playerName = cleanseString(request.body.playerName);
+  console.log(gameId)
+  console.log(playerName)
+  db.run(
+    `SELECT * FROM Players WHERE game_id='${gameId}' and name='${playerName}'`,
+    error => {
+      console.log(error);
+      if (error) {
+        response.send({
+          success: false,
+          message: "Something went wrong :( :( :("
+        });
+      } else {
+        response.send({
+          success: true
+        });
       }
-    );
-  
+    }
+  );
 });
 
 // helper function that prevents html/css/script malice

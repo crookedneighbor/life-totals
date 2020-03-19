@@ -17,13 +17,29 @@ function displayGame () {
   startJoinContainer.classList.add('is-hidden');
   gameContainer.classList.remove('is-hidden');
 }
+
+function hideNameInput () {
+  document.getElementById('your-name').classList.add('is-hidden');
+}
+
 if (gameId) {
   joinInput.value = gameId
   displayGame()
-}
-if (playerName) {
   
+  if (playerName) {
+  fetch('/verify-player', {
+    method: "POST",
+    body: JSON.stringify({
+      gameId,
+      playerName
+    }),
+    headers: { "Content-Type": "application/json" }
+  }).then(res => res.json()).then(() => {
+    hideNameInput()
+  })
 }
+}
+
 startButton.addEventListener('click', (e) => {
   fetch("/start-game", {
     method: "POST",
