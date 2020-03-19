@@ -18,13 +18,16 @@ function displayGame () {
   gameContainer.classList.remove('is-hidden');
 }
 
-function hideNameInput () {
+function start () {
   document.getElementById('your-name').classList.add('is-hidden');
+  
+  setInterval(() => {
+    
+  }, 5000)
 }
 
 if (gameId) {
   joinInput.value = gameId
-  displayGame()
   
   if (playerName) {
   fetch('/verify-player', {
@@ -34,9 +37,14 @@ if (gameId) {
       playerName
     }),
     headers: { "Content-Type": "application/json" }
-  }).then(res => res.json()).then(() => {
-    hideNameInput()
+  }).then(res => res.json()).then(response => {
+    if (response.success) {
+      displayGame()
+      start()
+    }
   })
+} else {
+    displayGame()
 }
 }
 
@@ -72,7 +80,7 @@ addPlayerButton.addEventListener('click', () => {
     .then(response => {
     console.log(response)
       if (response.success) {
-        //document.getElementById('your-name').classList.add('is-hidden');
+
         //yourLife.querySelector('.points').innerText = response.lifeTotal;
         //yourLife.classList.remove('is-hidden');
         displayGame();

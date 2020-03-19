@@ -1,6 +1,7 @@
 // server.js
 // where your node app starts
 
+const del = require('del')
 // init project
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -29,7 +30,7 @@ db.serialize(() => {
       "CREATE TABLE Games (id INTEGER PRIMARY KEY AUTOINCREMENT, public_id TEXT)"
     );
     db.run(
-      "CREATE TABLE Players (id INTEGER PRIMARY KEY AUTOINCREMENT, game_id TEXT, name TEXT)"
+      "CREATE TABLE Players (id INTEGER PRIMARY KEY AUTOINCREMENT, game_id TEXT, name TEXT, life INTEGER)"
     );
     db.run(
       "CREATE TABLE Cards (id INTEGER PRIMARY KEY AUTOINCREMENT, game_id TEXT, img TEXT)"
@@ -140,7 +141,6 @@ app.post("/verify-player", (request, response) => {
   db.run(
     `SELECT * FROM Players WHERE game_id='${gameId}' and name='${playerName}'`,
     error => {
-      console.log(error);
       if (error) {
         response.send({
           success: false,
@@ -154,6 +154,10 @@ app.post("/verify-player", (request, response) => {
     }
   );
 });
+
+app.get('/game-state/', (request, response) => {
+  
+})
 
 // helper function that prevents html/css/script malice
 const cleanseString = function(string) {
