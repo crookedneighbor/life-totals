@@ -130,6 +130,31 @@ app.post("/join-game", (request, response) => {
   }
 });
 
+app.post("/verify-player", (request, response) => {
+  const gameId = cleanseString(request.body.gameId);
+  const playerName = cleanseString(request.body.name);
+
+  
+    db.run(
+      `SELECT * FROM Players where game_id=${gameId} and name=${playerName}`,
+      error => {
+        console.log(error);
+        if (error) {
+          response.send({
+            success: false,
+            message: "Something went wrong :( :( :("
+          });
+        } else {
+          response.send({
+            success: true,
+            lifeTotal: 40
+          });
+        }
+      }
+    );
+  
+});
+
 // helper function that prevents html/css/script malice
 const cleanseString = function(string) {
   return string.replace(/</g, "&lt;").replace(/>/g, "&gt;");
