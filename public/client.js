@@ -10,6 +10,7 @@ const startButton = document.getElementById('start-game');
 const joinButton = document.getElementById('join-game');
 const joinInput = document.getElementById('join-id');
 const addPlayerButton = document.getElementById('add-player');
+const lifeTotals = document.getElementById('life-totals')
 
 const yourLife = document.getElementById('your-life-total');
 
@@ -21,7 +22,7 @@ function displayGame () {
 function start () {
   document.getElementById('your-name').classList.add('is-hidden');
   
-  const ref = setInterval(() => {
+  /*const ref = setInterval(() => {
     fetch('/game-state/' + joinInput.value).then(res => res.json()).then(response => {
       console.log(response)
       if (!response.success) {
@@ -30,11 +31,20 @@ function start () {
         return
       }
       
-      response.players.forEach(player => {
-        console.log('player:', player)
+      response.players.forEach(({name, life}) => {
+        let el = document.querySelector(`[data-player-name="${name}"]`)
+        
+        if (!el) {
+          el = document.createElement('div')
+          el.classList.add('life-total')
+          el.setAttribute('data-player-name', name)
+          lifeTotals.appendChild(el)
+        }
+        el.innerText = life || 0;
+        console.log('player:', name, life)
       });
     })
-  }, 5000)
+  }, 5000)*/
 }
 
 if (gameId) {
