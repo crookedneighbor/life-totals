@@ -21,16 +21,16 @@ const yourLife = document.getElementById("your-life-total");
 function displayGame() {
   startJoinContainer.classList.add("is-hidden");
   gameContainer.classList.remove("is-hidden");
+  loader.classList.add('is-hidden')
 }
 
 function createLifeHandler(el, increment) {
   const lifePointsContainer = el.querySelector(".points");
   const name = el.getAttribute("data-player-name")
 
-  return function() {
+  return function(e) {
     clearTimeout(players[name].timeoutRef);
     players[name].updateInProgress = true
-    el.blur()
     
     if (increment) {
       players[name].life++;
@@ -137,6 +137,9 @@ if (gameId) {
   } else {
     displayGame();
   }
+} else {
+  loader.classList.add('is-hidden')
+  startJoinContainer.classList.remove('is-hidden')
 }
 
 startButton.addEventListener("click", e => {
@@ -161,6 +164,7 @@ startButton.addEventListener("click", e => {
 joinButton.addEventListener("click", displayGame);
 
 addPlayerButton.addEventListener("click", () => {
+  loader.classList.add('is-hidden')
   fetch("/join-game", {
     method: "POST",
     body: JSON.stringify({
@@ -173,9 +177,8 @@ addPlayerButton.addEventListener("click", () => {
     .then(response => {
       console.log(response);
       if (response.success) {
-        //yourLife.querySelector('.points').innerText = response.lifeTotal;
-        //yourLife.classList.remove('is-hidden');
-        displayGame();
+        
+        start();
       }
     });
 });

@@ -29,35 +29,7 @@
   <body>
     <main class="container">
       <div id="main" class="columns is-vcentered is-desktop">
-        <div id="start-or-join-container" class="column has-text-centered">
-          <button id="start-game" class="button is-large is-primary">
-            Start Game
-          </button>
-
-          <p>
-            or
-          </p>
-
-          <div id="join-game-container" class="field has-addons">
-            <div class="control">
-              <input
-                id="join-id"
-                class="input"
-                type="text"
-                placeholder="Enter Game Code Here"
-              />
-            </div>
-            <div class="control">
-              <a id="join-game" class="button is-info">
-                Join Game
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div id="game-container" class="is-hidden column has-text-centered">
-          <div id="life-totals">
-            <div id="loader">
+        <div class="column has-text-centered" id="loader">
               <svg
                 width="105"
                 height="105"
@@ -156,10 +128,37 @@
                   />
                 </circle>
               </svg>
-              <p>
-                Looking for Players
-              </p>
+              <p id="loading-message"></p>
             </div>
+        <div id="start-or-join-container" class="column has-text-centered is-hidden">
+          <button id="start-game" class="button is-large is-primary">
+            Start Game
+          </button>
+
+          <p>
+            or
+          </p>
+
+          <div id="join-game-container" class="field has-addons">
+            <div class="control">
+              <input
+                id="join-id"
+                class="input"
+                type="text"
+                placeholder="Enter Game Code Here"
+              />
+            </div>
+            <div class="control">
+              <a id="join-game" class="button is-info">
+                Join Game
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div id="game-container" class="is-hidden column has-text-centered">
+          <div id="life-totals">
+            
             <div class="life-total is-hidden">
               <span class="points">15</span>
             </div>
