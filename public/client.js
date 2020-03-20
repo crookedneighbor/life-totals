@@ -67,6 +67,11 @@ function createPlayer(name, life, color) {
       player.life = lifeTotal
       lifeTotalContainer.innerText = lifeTotal
     },
+    updateLife() {
+      player.update({
+        life: player.life
+      })
+    },
     update(updates) {
       clearTimeout(updateTimeoutRef);
       player.updateInProgress = true
