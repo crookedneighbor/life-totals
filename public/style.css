@@ -20,7 +20,7 @@ main.container {
 }
 
 #life-totals {
-  width: 400px;
+  max-width: 400px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -30,8 +30,8 @@ main.container {
   position: relative;
   font-size: 4rem;
   color: white;
-  height: 196px;
-  width:  196px;
+  height: 190px;
+  width:  190px;
   display: flex;
   align-items: center;
   justify-content: center;
