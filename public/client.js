@@ -12,6 +12,8 @@ const joinInput = document.getElementById('join-id');
 const addPlayerButton = document.getElementById('add-player');
 const lifeTotals = document.getElementById('life-totals')
 
+const loader = document.getElementById('loader')
+
 const yourLife = document.getElementById('your-life-total');
 
 function displayGame () {
@@ -32,6 +34,7 @@ function start () {
       }
       
       response.players.forEach(({name, life}) => {
+        loader.classList.add('is-hidden')
         let el = document.querySelector(`[data-player-name="${name}"]`)
         
         if (!el) {
@@ -39,13 +42,14 @@ function start () {
           el.innerHTML = `
 <div class="name"></div>
 <div class="points"></div>
-<div class="plus"><span>+</span></div>
-<div class="minus"><span>-</span></div>
+<div class="counter-button plus"><span>+</span></div>
+<div class="counter-button minus"><span>-</span></div>
 `
           el.classList.add('life-total')
           el.querySelector('.name').innerText = name
           
           el.setAttribute('data-player-name', name)
+          el.querySelector('.plus').addEventListener('click', )
           lifeTotals.appendChild(el)
         }
         el.querySelector('.points').innerText = life || 0;
