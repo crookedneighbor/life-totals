@@ -12,7 +12,7 @@ const joinInput = document.getElementById("join-id");
 const addPlayerButton = document.getElementById("add-player");
 const lifeTotals = document.getElementById("life-totals");
 
-const players = {}
+const players = {};
 
 const loader = document.getElementById("loader");
 
@@ -21,81 +21,98 @@ const yourLife = document.getElementById("your-life-total");
 function displayGame() {
   startJoinContainer.classList.add("is-hidden");
   gameContainer.classList.remove("is-hidden");
-  loader.classList.add('is-hidden')
+  loader.classList.add("is-hidden");
 }
 
-function createPlayer (name, life, color) {
+function createPlayer(name, life, color) {
   const el = document.createElement("div");
-            el.innerHTML = `
+  el.innerHTML = `
 <div class="name"></div>
 <div class="points"></div>
 <div class="counter-button plus"><span>+</span></div>
 <div class="counter-button minus"><span>-</span></div>
 `;
-            el.classList.add("life-total");
-            el.style.background = color
-            el.querySelector(".name").innerText = name;
+  el.classList.add("life-total");
+  el.style.background = color;
+  el.querySelector(".name").innerText = name;
 
-            el.setAttribute("data-player-name", name);
-            el.querySelector(".plus").addEventListener(
-              "click",
-              createLifeHandler(el, true)
-            );
-            el.querySelector(".minus").addEventListener(
-              "click",
-              createLifeHandler(el, false)
-            );
-            lifeTotals.appendChild(el);
-          }
+  el.setAttribute("data-player-name", name);
+  el.querySelector(".plus").addEventListener(
+    "click",
+    createLifeHandler(el, true)
+  );
+  el.querySelector(".minus").addEventListener(
+    "click",
+    createLifeHandler(el, false)
+  );
+  lifeTotals.appendChild(el);
+  
+  const lifeTotalContainer = el.querySelector(".points")
+  let updateTimeoutRef
+
   const player = {
     name,
     color,
     el,
     updateInProgress: false,
     life: life || 0,
-    
+
     addLife() {
-      player.life++
+      player.setLife(player.life + 1);
     },
     subtractLife() {
-      player.life--
+      player.setLife(player.life - 1);
     },
-    update() {
+    setLife (lifeTotal) {
+      player.life = lifeTotal
+      lifeTotalContainer.innerText = lifeTotal
+    },
+    update(updates) {
+      clearTimeout(updateTimeoutRef);
+      player.updateInProgress = true
       
+      updateTimeoutRef = setTimeout(() => {
+        fetch(`/game-state/${joinInput.value}/update-player/${player.name}`, {
+        method: "POST",
+        body: JSON.stringify(updates),
+        headers: { "Content-Type": "application/json" }
+      })
+        .then(res => res.json())
+        .then(response => {
+          player.updateInProgress = false;
+        });
+      }, 1000);
     }
-  }
-  
-  return player
+  };
+
+  return player;
 }
 
 function createLifeHandler(el, increment) {
-  const lifePointsContainer = el.querySelector(".points");
-  const name = el.getAttribute("data-player-name")
+  const name = el.getAttribute("data-player-name");
 
   return function(e) {
     clearTimeout(players[name].timeoutRef);
-    players[name].updateInProgress = true
-    
+    players[name].updateInProgress = true;
+
     if (increment) {
-      players[name].addLife()
+      players[name].addLife();
     } else {
-      players[name].subtractLife()
+      players[name].subtractLife();
     }
-    lifePointsContainer.innerText = players[name].life
-    
+
     players[name].timeoutRef = setTimeout(function() {
-      fetch(
-        `/game-state/${joinInput.value}/update-player/${name}`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            life: players[name].life
-          }),
-          headers: { "Content-Type": "application/json" }
-        }
-      ).then(res => res.json()).then(response => {
-        players[name].updateInProgress = false
-      });
+      fetch(`/game-state/${joinInput.value}/update-player/${name}`, {
+        method: "POST",
+        body: JSON.stringify({
+          life: players[name].life
+        }),
+        headers: { "Content-Type": "application/json" }
+      })
+        .then(res => res.json())
+        .then(response => {
+          players[name].updateInProgress = false;
+        });
     }, 1000);
   };
 }
@@ -116,17 +133,16 @@ function start() {
 
         response.players.forEach(({ name, life, color }) => {
           if (!players[name]) {
-            players[name] = createPlayer(name, life, color)
+            players[name] = createPlayer(name, life, color);
           }
-          
+
           loader.classList.add("is-hidden");
 
-          life = life || 0
+          life = life || 0;
           if (!players[name].updateInProgress) {
-            players[name].life = life
-            el.querySelector(".points").innerText = life;
+            players[name].setLife(life);
           }
-          
+
           console.log("player:", name, life);
         });
       });
@@ -156,8 +172,8 @@ if (gameId) {
     displayGame();
   }
 } else {
-  loader.classList.add('is-hidden')
-  startJoinContainer.classList.remove('is-hidden')
+  loader.classList.add("is-hidden");
+  startJoinContainer.classList.remove("is-hidden");
 }
 
 startButton.addEventListener("click", e => {
@@ -182,7 +198,7 @@ startButton.addEventListener("click", e => {
 joinButton.addEventListener("click", displayGame);
 
 addPlayerButton.addEventListener("click", () => {
-  loader.classList.remove('is-hidden')
+  loader.classList.remove("is-hidden");
   fetch("/join-game", {
     method: "POST",
     body: JSON.stringify({
@@ -195,7 +211,6 @@ addPlayerButton.addEventListener("click", () => {
     .then(response => {
       console.log(response);
       if (response.success) {
-        
         start();
       }
     });
