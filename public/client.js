@@ -24,8 +24,48 @@ function displayGame() {
   loader.classList.add('is-hidden')
 }
 
-function updatePlayer (name) {
+function createPlayer (name, life, color) {
+  const el = document.createElement("div");
+            el.innerHTML = `
+<div class="name"></div>
+<div class="points"></div>
+<div class="counter-button plus"><span>+</span></div>
+<div class="counter-button minus"><span>-</span></div>
+`;
+            el.classList.add("life-total");
+            el.style.background = color
+            el.querySelector(".name").innerText = name;
+
+            el.setAttribute("data-player-name", name);
+            el.querySelector(".plus").addEventListener(
+              "click",
+              createLifeHandler(el, true)
+            );
+            el.querySelector(".minus").addEventListener(
+              "click",
+              createLifeHandler(el, false)
+            );
+            lifeTotals.appendChild(el);
+          }
+  const player = {
+    name,
+    color,
+    el,
+    updateInProgress: false,
+    life: life || 0,
+    
+    addLife() {
+      player.life++
+    },
+    subtractLife() {
+      player.life--
+    },
+    update() {
+      
+    }
+  }
   
+  return player
 }
 
 function createLifeHandler(el, increment) {
@@ -37,9 +77,9 @@ function createLifeHandler(el, increment) {
     players[name].updateInProgress = true
     
     if (increment) {
-      players[name].life++;
+      players[name].addLife()
     } else {
-      players[name].life--
+      players[name].subtractLife()
     }
     lifePointsContainer.innerText = players[name].life
     
@@ -76,37 +116,11 @@ function start() {
 
         response.players.forEach(({ name, life, color }) => {
           if (!players[name]) {
-            players[name] = {
-              updateInProgress: false
-            }
+            players[name] = createPlayer(name, life, color)
           }
           
           loader.classList.add("is-hidden");
-          let el = document.querySelector(`[data-player-name="${name}"]`);
 
-          if (!el) {
-            el = document.createElement("div");
-            el.innerHTML = `
-<div class="name"></div>
-<div class="points"></div>
-<div class="counter-button plus"><span>+</span></div>
-<div class="counter-button minus"><span>-</span></div>
-`;
-            el.classList.add("life-total");
-            el.style.background = color
-            el.querySelector(".name").innerText = name;
-
-            el.setAttribute("data-player-name", name);
-            el.querySelector(".plus").addEventListener(
-              "click",
-              createLifeHandler(el, true)
-            );
-            el.querySelector(".minus").addEventListener(
-              "click",
-              createLifeHandler(el, false)
-            );
-            lifeTotals.appendChild(el);
-          }
           life = life || 0
           if (!players[name].updateInProgress) {
             players[name].life = life
