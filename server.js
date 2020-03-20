@@ -11,6 +11,16 @@ const uid = new (require("short-unique-id")).default();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+const colors = [
+  '#cd5c5c',
+  '#008599',
+  '#7ecd5c',
+  '#655ccd',
+  '#c05ccd',
+  '#cd5c89',
+  '#dbaf0d'
+]
+
 // we've started you off with Express,
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
 
@@ -23,6 +33,7 @@ const exists = fs.existsSync(dbFile);
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database(dbFile);
 
+
 // if ./.data/sqlite.db does not exist, create it, otherwise print records to console
 db.serialize(() => {
   if (!exists) {
@@ -30,7 +41,7 @@ db.serialize(() => {
       "CREATE TABLE Games (id INTEGER PRIMARY KEY AUTOINCREMENT, public_id TEXT)"
     );
     db.run(
-      "CREATE TABLE Players (id INTEGER PRIMARY KEY AUTOINCREMENT, game_id TEXT, name TEXT, life INTEGER)"
+      "CREATE TABLE Players (id INTEGER PRIMARY KEY AUTOINCREMENT, game_id TEXT, name TEXT, life INTEGER, color TEXT)"
     );
     db.run(
       "CREATE TABLE Cards (id INTEGER PRIMARY KEY AUTOINCREMENT, game_id TEXT, img TEXT)"
@@ -106,16 +117,20 @@ app.post("/start-game", (request, response) => {
 app.post("/join-game", (request, response) => {
   const publicId = cleanseString(request.body.publicId);
   const playerName = cleanseString(request.body.name);
+  const randomColor = Math.floor(Math.random * colors.length)
+  
+  console.log('random color index', randomColor)
 
   // DISALLOW_WRITE is an ENV variable that gets reset for new projects
   // so they can write to the database
   if (!process.env.DISALLOW_WRITE) {
     console.log("id", publicId);
     db.run(
-      `INSERT INTO Players (game_id, name, life) VALUES (?, ?, ?)`,
+      `INSERT INTO Players (game_id, name, life, color) VALUES (?, ?, ?, ?)`,
       publicId,
       playerName,
       40,
+      color,
       error => {
         console.log(error);
         if (error) {

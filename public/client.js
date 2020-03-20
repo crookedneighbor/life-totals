@@ -23,19 +23,22 @@ function displayGame() {
   gameContainer.classList.remove("is-hidden");
 }
 
-function createLifeHandler(el, ) {
-  let timeoutRef;
+function createLifeHandler(el, increment) {
   const lifePointsContainer = el.querySelector(".points");
   const name = el.getAttribute("data-player-name")
 
   return function() {
-    clearTimeout(timeoutRef);
+    clearTimeout(players[name].timeoutRef);
     players[name].updateInProgress = true
     
-    players[name].life++;
+    if (increment) {
+      players[name].life++;
+    } else {
+      players[name].life--
+    }
     lifePointsContainer.innerText = players[name].life
     
-    timeoutRef = setTimeout(function() {
+    players[name].timeoutRef = setTimeout(function() {
       fetch(
         `/game-state/${joinInput.value}/update-life/${name}`,
         {
@@ -50,10 +53,6 @@ function createLifeHandler(el, ) {
       });
     }, 1000);
   };
-}
-
-function createMinusLifeHandler(el) {
-  return function() {};
 }
 
 function start() {
@@ -94,19 +93,20 @@ function start() {
             el.setAttribute("data-player-name", name);
             el.querySelector(".plus").addEventListener(
               "click",
-              createAddLifeHandler(el)
+              createLifeHandler(el, true)
             );
             el.querySelector(".minus").addEventListener(
               "click",
-              createMinusLifeHandler(el)
+              createLifeHandler(el, false)
             );
             lifeTotals.appendChild(el);
           }
           life = life || 0
           if (!players[name].updateInProgress) {
             players[name].life = life
+            el.querySelector(".points").innerText = life;
           }
-          el.querySelector(".points").innerText = life;
+          
           console.log("player:", name, life);
         });
       });
