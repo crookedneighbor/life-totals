@@ -21,9 +21,26 @@ function displayGame() {
   gameContainer.classList.remove("is-hidden");
 }
 
-function createAddLifeHandler() {}
+function createAddLifeHandler(el) {
+  let timeoutRef
+  const lifePointsContainer = el.querySelector('.points')
+  
+  return function () {
+    clearTimeout(timeoutRef)
+    let life = Number(lifePointsContainer.innerText)
+    life++
+    lifePointsContainer.innerText = life
+    timeoutRef = setTimeout(function () {
+      console.log('did it!')
+    }, 1000)
+  }
+}
 
-function createMinusLifeHandler() {}
+function createMinusLifeHandler(el) {
+  return function () {
+    
+  }
+}
 
 function start() {
   document.getElementById("your-name").classList.add("is-hidden");
