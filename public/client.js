@@ -39,6 +39,8 @@ function start () {
           el.innerHTML = `
 <div class="name"></div>
 <div class="points"></div>
+<div class="plus"><span>+</span></div>
+<div class="minus"><span>-</span></div>
 `
           el.classList.add('life-total')
           el.querySelector('.name').innerText = name
