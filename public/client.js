@@ -12,6 +12,8 @@ const joinInput = document.getElementById("join-id");
 const addPlayerButton = document.getElementById("add-player");
 const lifeTotals = document.getElementById("life-totals");
 
+const players = {}
+
 const loader = document.getElementById("loader");
 
 const yourLife = document.getElementById("your-life-total");
@@ -21,25 +23,37 @@ function displayGame() {
   gameContainer.classList.remove("is-hidden");
 }
 
-function createAddLifeHandler(el) {
-  let timeoutRef
-  const lifePointsContainer = el.querySelector('.points')
-  
-  return function () {
-    clearTimeout(timeoutRef)
-    let life = Number(lifePointsContainer.innerText)
-    life++
-    lifePointsContainer.innerText = life
-    timeoutRef = setTimeout(function () {
-      console.log('did it!')
-    }, 1000)
-  }
+function createLifeHandler(el, ) {
+  let timeoutRef;
+  const lifePointsContainer = el.querySelector(".points");
+  const name = el.getAttribute("data-player-name")
+
+  return function() {
+    clearTimeout(timeoutRef);
+    players[name].updateInProgress = true
+    
+    players[name].life++;
+    lifePointsContainer.innerText = players[name].life
+    
+    timeoutRef = setTimeout(function() {
+      fetch(
+        `/game-state/${joinInput.value}/update-life/${name}`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            life: players[name].life
+          }),
+          headers: { "Content-Type": "application/json" }
+        }
+      ).then(res => res.json()).then(response => {
+        players[name].updateInProgress = false
+      });
+    }, 1000);
+  };
 }
 
 function createMinusLifeHandler(el) {
-  return function () {
-    
-  }
+  return function() {};
 }
 
 function start() {
@@ -57,6 +71,12 @@ function start() {
         }
 
         response.players.forEach(({ name, life }) => {
+          if (!players[name]) {
+            players[name] = {
+              updateInProgress: false
+            }
+          }
+          
           loader.classList.add("is-hidden");
           let el = document.querySelector(`[data-player-name="${name}"]`);
 
@@ -82,7 +102,11 @@ function start() {
             );
             lifeTotals.appendChild(el);
           }
-          el.querySelector(".points").innerText = life || 0;
+          life = life || 0
+          if (!players[name].updateInProgress) {
+            players[name].life = life
+          }
+          el.querySelector(".points").innerText = life;
           console.log("player:", name, life);
         });
       });

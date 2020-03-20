@@ -179,10 +179,22 @@ app.get("/game-state/:gameId", (request, response) => {
 
 app.post('/game-state/:gameId/update-life/:player', (request, response) => {
   const gameId = request.params.gameId
-  const player = request.params.player
+  const playerName = request.params.player
   const life = request.body.life
   
-  db.run(`UPDATE Players SET life = ${life} WHERE `)
+  db.run(`UPDATE Players SET life = '${life}' WHERE game_id='${gameId}' and name='${playerName}'`, error => {
+    if (error) {
+      console.log(error);
+        response.send({
+          success: false
+        });
+        return;
+    }
+    console.log('success!')
+    response.send({
+      success: true
+    });
+  })
 })
 
 // helper function that prevents html/css/script malice
