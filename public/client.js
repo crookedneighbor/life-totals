@@ -24,6 +24,10 @@ function displayGame() {
   loader.classList.add('is-hidden')
 }
 
+function updatePlayer (name) {
+  
+}
+
 function createLifeHandler(el, increment) {
   const lifePointsContainer = el.querySelector(".points");
   const name = el.getAttribute("data-player-name")
@@ -41,7 +45,7 @@ function createLifeHandler(el, increment) {
     
     players[name].timeoutRef = setTimeout(function() {
       fetch(
-        `/game-state/${joinInput.value}/update-life/${name}`,
+        `/game-state/${joinInput.value}/update-player/${name}`,
         {
           method: "POST",
           body: JSON.stringify({
@@ -112,7 +116,7 @@ function start() {
           console.log("player:", name, life);
         });
       });
-  }, 2500);
+  }, 1000);
 }
 
 if (gameId) {

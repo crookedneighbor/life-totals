@@ -194,7 +194,7 @@ app.get("/game-state/:gameId", (request, response) => {
   );
 });
 
-app.post('/game-state/:gameId/update-life/:player', (request, response) => {
+app.post('/game-state/:gameId/update-player/:player', (request, response) => {
   const gameId = request.params.gameId
   const playerName = request.params.player
   const life = request.body.life
