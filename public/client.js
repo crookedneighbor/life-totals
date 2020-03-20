@@ -69,7 +69,7 @@ function start() {
           return;
         }
 
-        response.players.forEach(({ name, life }) => {
+        response.players.forEach(({ name, life, color }) => {
           if (!players[name]) {
             players[name] = {
               updateInProgress: false
@@ -88,6 +88,7 @@ function start() {
 <div class="counter-button minus"><span>-</span></div>
 `;
             el.classList.add("life-total");
+            el.style.background = color
             el.querySelector(".name").innerText = name;
 
             el.setAttribute("data-player-name", name);
@@ -110,7 +111,7 @@ function start() {
           console.log("player:", name, life);
         });
       });
-  }, 5000);
+  }, 2500);
 }
 
 if (gameId) {

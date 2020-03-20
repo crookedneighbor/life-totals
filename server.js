@@ -117,7 +117,8 @@ app.post("/start-game", (request, response) => {
 app.post("/join-game", (request, response) => {
   const publicId = cleanseString(request.body.publicId);
   const playerName = cleanseString(request.body.name);
-  const randomColor = Math.floor(Math.random * colors.length)
+  const randomColor = Math.floor(Math.random() * colors.length)
+  const color = colors[randomColor]
   
   console.log('random color index', randomColor)
 
@@ -141,7 +142,8 @@ app.post("/join-game", (request, response) => {
         } else {
           response.send({
             success: true,
-            lifeTotal: 40
+            lifeTotal: 40,
+            color
           });
         }
       }
@@ -174,7 +176,7 @@ app.post("/verify-player", (request, response) => {
 app.get("/game-state/:gameId", (request, response) => {
   const gameId = request.params.gameId;
   db.all(
-    `SELECT name,life FROM Players WHERE game_id='${gameId}'`,
+    `SELECT name,life,color FROM Players WHERE game_id='${gameId}'`,
     (err, rows) => {
       if (err) {
         console.log(err);

@@ -19,7 +19,14 @@ main.container {
   font-size: 6rem;
 }
 
+#life-totals {
+  width: 400px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .life-total {
+  flex: 0 50%;
   position: relative;
   font-size: 4rem;
   color: white;
