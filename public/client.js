@@ -164,7 +164,7 @@ startButton.addEventListener("click", e => {
 joinButton.addEventListener("click", displayGame);
 
 addPlayerButton.addEventListener("click", () => {
-  loader.classList.add('is-hidden')
+  loader.classList.remove('is-hidden')
   fetch("/join-game", {
     method: "POST",
     body: JSON.stringify({

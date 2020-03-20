@@ -30,8 +30,8 @@ main.container {
   position: relative;
   font-size: 4rem;
   color: white;
-  height: 200px;
-  width: 200px;
+  height: 196px;
+  width:  196px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -40,8 +40,8 @@ main.container {
 .life-total .name {
   position: absolute;
   top: 3px;
-  left: 10px;
   font-size: 1.25rem;
+  width: 100%;
 }
 
 .life-total .counter-button {
@@ -49,7 +49,7 @@ main.container {
   font-size: 3rem;
   bottom: 0;
   cursor: pointer;
-  width: 99px;
+  width: 97px;
   height: 170px;
 }
 
