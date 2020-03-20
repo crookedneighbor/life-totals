@@ -30,6 +30,7 @@ function createLifeHandler(el, increment) {
   return function() {
     clearTimeout(players[name].timeoutRef);
     players[name].updateInProgress = true
+    el.blur()
     
     if (increment) {
       players[name].life++;
